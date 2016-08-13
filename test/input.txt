@@ -4,6 +4,7 @@
 
   # should recognise invalid command
   sfdfd
+  qweqwe
 
 ##########################################################
 # clean and check state
