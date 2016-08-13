@@ -214,11 +214,13 @@ public class AddressBook {
      * ====================================================================
      */
     private static void showWelcomeMessage() {
-        showToUser(DIVIDER, DIVIDER, VERSION, MESSAGE_WELCOME, DIVIDER);
+    	String[] myMessage = {DIVIDER, DIVIDER, VERSION, MESSAGE_WELCOME, DIVIDER};
+        showToUser(myMessage);
     }
 
     private static void showResultToUser(String result) {
-        showToUser(result, DIVIDER);
+    	String[] myMessage = {result, DIVIDER};
+        showToUser(myMessage);
     }
 
     /*
@@ -232,7 +234,8 @@ public class AddressBook {
      * Echoes the user input back to the user.
      */
     private static void echoUserCommand(String userCommand) {
-        showToUser("[Command entered:" + userCommand + "]");
+    	String[] myMessage = {"[Command entered:" + userCommand + "]"};
+        showToUser(myMessage);
     }
 
     /*
@@ -252,7 +255,8 @@ public class AddressBook {
      */
     private static void processProgramArgs(String[] args) {
         if (args.length >= 2) {
-            showToUser(MESSAGE_INVALID_PROGRAM_ARGS);
+        	String[] myMessage = {MESSAGE_INVALID_PROGRAM_ARGS};
+            showToUser(myMessage);
             exitProgram();
         }
 
@@ -273,7 +277,8 @@ public class AddressBook {
     private static void setupGivenFileForStorage(String filePath) {
 
         if (!isValidFilePath(filePath)) {
-            showToUser(String.format(MESSAGE_INVALID_FILE, filePath));
+        	String[] myMessage = {String.format(MESSAGE_INVALID_FILE, filePath)};
+            showToUser(myMessage);
             exitProgram();
         }
 
@@ -285,7 +290,8 @@ public class AddressBook {
      * Displays the goodbye message and exits the runtime.
      */
     private static void exitProgram() {
-        showToUser(MESSAGE_GOODBYE, DIVIDER, DIVIDER);
+    	String[] myMessage = {MESSAGE_GOODBYE, DIVIDER, DIVIDER};
+        showToUser(myMessage);
         System.exit(0);
     }
 
@@ -295,7 +301,8 @@ public class AddressBook {
      * Exits program if the file cannot be created.
      */
     private static void setupDefaultFileForStorage() {
-        showToUser(MESSAGE_USING_DEFAULT_FILE);
+    	String[] myMessage = {MESSAGE_USING_DEFAULT_FILE};
+        showToUser(myMessage);
         storageFilePath = DEFAULT_STORAGE_FILEPATH;
         createFileIfMissing(storageFilePath);
     }
@@ -584,10 +591,18 @@ public class AddressBook {
     /**
      * Shows a message to the user
      */
+    /*
     private static void showToUser(String... message) {
         for (String m : message) {
             System.out.println(LINE_PREFIX + m);
         }
+    }
+    */
+    // Changed to use a String[] array instead of varargs
+    private static void showToUser(String[] message){
+    	for (String m: message){
+    		System.out.println(LINE_PREFIX + m);
+    	}
     }
 
     /**
@@ -597,7 +612,8 @@ public class AddressBook {
      */
     private static void showToUser(ArrayList<HashMap<PersonProperty, String>> persons) {
         String listAsString = getDisplayString(persons);
-        showToUser(listAsString);
+        String[] myMessage = {listAsString};
+        showToUser(myMessage);
         updateLatestViewedPersonListing(persons);
     }
 
@@ -683,13 +699,16 @@ public class AddressBook {
             return;
         }
 
-        showToUser(String.format(MESSAGE_ERROR_MISSING_STORAGE_FILE, filePath));
+        String[] myMessage = {String.format(MESSAGE_ERROR_MISSING_STORAGE_FILE, filePath)};
+        showToUser(myMessage);
 
         try {
             storageFile.createNewFile();
-            showToUser(String.format(MESSAGE_STORAGE_FILE_CREATED, filePath));
+            String[] myMessageCreate = {String.format(MESSAGE_STORAGE_FILE_CREATED, filePath)};
+            showToUser(myMessageCreate);
         } catch (IOException ioe) {
-            showToUser(String.format(MESSAGE_ERROR_CREATING_STORAGE_FILE, filePath));
+        	String[] errorMessage = {String.format(MESSAGE_ERROR_CREATING_STORAGE_FILE, filePath)};
+            showToUser(errorMessage);
             exitProgram();
         }
     }
@@ -704,7 +723,8 @@ public class AddressBook {
     private static ArrayList<HashMap<PersonProperty, String>> loadPersonsFromFile(String filePath) {
         final Optional<ArrayList<HashMap<PersonProperty, String>>> successfullyDecoded = decodePersonsFromStrings(getLinesInFile(filePath));
         if (!successfullyDecoded.isPresent()) {
-            showToUser(MESSAGE_INVALID_STORAGE_FILE_CONTENT);
+        	String[] myMessage = {MESSAGE_INVALID_STORAGE_FILE_CONTENT};
+            showToUser(myMessage);
             exitProgram();
         }
         return successfullyDecoded.get();
@@ -719,10 +739,12 @@ public class AddressBook {
         try {
             lines = new ArrayList(Files.readAllLines(Paths.get(filePath)));
         } catch (FileNotFoundException fnfe) {
-            showToUser(String.format(MESSAGE_ERROR_MISSING_STORAGE_FILE, filePath));
+        	String[] myMessage = {String.format(MESSAGE_ERROR_MISSING_STORAGE_FILE, filePath)};
+            showToUser(myMessage);
             exitProgram();
         } catch (IOException ioe) {
-            showToUser(String.format(MESSAGE_ERROR_READING_FROM_FILE, filePath));
+        	String[] myMessage = {String.format(MESSAGE_ERROR_READING_FROM_FILE, filePath)};
+            showToUser(myMessage);
             exitProgram();
         }
         return lines;
@@ -739,7 +761,8 @@ public class AddressBook {
         try {
             Files.write(Paths.get(storageFilePath), linesToWrite);
         } catch (IOException ioe) {
-            showToUser(String.format(MESSAGE_ERROR_WRITING_TO_FILE, filePath));
+        	String[] myMessage = {String.format(MESSAGE_ERROR_WRITING_TO_FILE, filePath)};
+            showToUser(myMessage);
             exitProgram();
         }
     }
